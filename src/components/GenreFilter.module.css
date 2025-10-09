@@ -1,0 +1,17 @@
+.wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0 12px;
+}
+
+.select {
+  border: 1px solid var(--border);
+  background: #fff;
+  border-radius: 8px;
+  padding: 6px 10px;
+}
+.label {
+  font-size: 14px;
+  color: var(--muted);
+}

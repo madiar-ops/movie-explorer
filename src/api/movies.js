@@ -1,8 +1,11 @@
 import client, { withSignal } from "./client";
-
+const PAGE_LIMIT = 150;
 export async function fetchPopular(page = 1, { signal } = {}) {
-  const res = await client.get("/movie/popular", withSignal({ params: { page } }, signal));
-  return res.data; 
+  const safePage = Math.min(page, PAGE_LIMIT);
+  const res = await client.get("/movie/popular", withSignal({ params: { page: safePage } }, signal));
+  const data = res.data;
+  data.total_pages = Math.min(data.total_pages, PAGE_LIMIT);
+  return data;
 }
 
 export async function fetchByQuery(query, page = 1, { signal } = {}) {
@@ -22,3 +25,4 @@ export async function fetchGenres({ signal } = {}) {
   const res = await client.get("/genre/movie/list", withSignal({}, signal));
   return res.data.genres; 
 }
+export default fetchPopular;

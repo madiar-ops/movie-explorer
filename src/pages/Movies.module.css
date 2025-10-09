@@ -1,0 +1,32 @@
+.header {
+  margin-bottom: 8px;
+}
+.title {
+  margin: 0;
+}
+.subtitle {
+  color: var(--muted);
+  font-size: 14px;
+  margin-top: 4px;
+}
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  align-items: center;
+  margin-top: 16px;
+}
+.pageBtn {
+  border: 1px solid var(--border);
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: #fff;
+}
+.pageBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.pageInfo {
+  font-size: 14px;
+  color: var(--muted);
+}

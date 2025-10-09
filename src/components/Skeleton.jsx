@@ -12,6 +12,8 @@ export function SkeletonCard() {
   );
 }
 
-export function SkeletonGrid({ count = 8 }) {
+function SkeletonGrid({ count = 8 }) {
   return Array.from({ length: count }).map((_, i) => <SkeletonCard key={i} />);
 }
+
+export default SkeletonGrid; 

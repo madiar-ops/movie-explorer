@@ -1,0 +1,20 @@
+.lead {
+  color: var(--muted);
+  max-width: 640px;
+}
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+.linkBtn {
+  border: 1px solid var(--border);
+  background: #fff;
+  padding: 8px 12px;
+  border-radius: 8px;
+  display: inline-block;
+}
+.link {
+  padding: 8px 12px;
+  display: inline-block;
+}

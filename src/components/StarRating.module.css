@@ -1,0 +1,18 @@
+.wrap {
+  display: flex;
+  gap: 4px;
+}
+.star {
+  cursor: pointer;
+  width: 28px;
+  height: 28px;
+  fill: #ddd;
+  transition: fill .15s ease;
+}
+.star:hover,
+.star.hovered {
+  fill: #facc15;
+}
+.star.active {
+  fill: #facc15;
+}

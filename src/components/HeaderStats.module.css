@@ -1,0 +1,5 @@
+.stats { display: inline-flex; align-items: center; gap: 10px; }
+.item { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; }
+.icon { font-size: 14px; line-height: 1; }
+.value { min-width: 16px; text-align: left; }
+.sep { opacity: 0.5; }

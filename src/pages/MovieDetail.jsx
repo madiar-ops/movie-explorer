@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 import fetchMovieDetails, { fetchMovieVideos, fetchRecommendations } from "../api/movieDetails.js";
@@ -6,11 +6,15 @@ import posterUrl from "../api/images.js";
 import Card from "../components/Card.jsx";
 import SkeletonGrid from "../components/Skeleton.jsx";
 import EmptyState from "../components/EmptyState.jsx";
+import useFavorites from "../store/favorites.js";            
+import StarRating from "../components/StarRating.jsx";
+import NoteBox from "../components/NoteBox.jsx";
 
 import s from "./MovieDetail.module.css";
 
 export default function MovieDetail() {
   const { id } = useParams();
+  const idNum = Number(id);                                   
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(true);
@@ -18,6 +22,10 @@ export default function MovieDetail() {
   const [videos, setVideos] = useState([]);
   const [recs, setRecs] = useState([]);
   const [err, setErr] = useState("");
+
+  const fav = useFavorites();                                  
+  const rating = fav.getRating(idNum);
+  const note = fav.getNote(idNum);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -28,16 +36,14 @@ export default function MovieDetail() {
       setErr("");
       try {
         const [details, vids, recList] = await Promise.all([
-          fetchMovieDetails(id, { signal: controller.signal }),
-          fetchMovieVideos(id, { signal: controller.signal }),
-          fetchRecommendations(id, { signal: controller.signal }),
+          fetchMovieDetails(idNum, { signal: controller.signal }),
+          fetchMovieVideos(idNum, { signal: controller.signal }),
+          fetchRecommendations(idNum, { signal: controller.signal }),
         ]);
-
         if (cancelled) return;
-
         setMovie(details);
         setVideos(vids);
-        setRecs(recList.slice(0, 8)); 
+        setRecs(recList.slice(0, 8));
       } catch {
         if (!cancelled) setErr("Failed to load movie details.");
       } finally {
@@ -50,7 +56,7 @@ export default function MovieDetail() {
       cancelled = true;
       controller.abort();
     };
-  }, [id]);
+  }, [idNum]);
 
   if (loading) return <SkeletonGrid count={4} />;
   if (err) return <EmptyState message={err} />;
@@ -84,6 +90,12 @@ export default function MovieDetail() {
           </div>
 
           <p className={s.overview}>{movie.overview || "No description available."}</p>
+        </div>
+
+        <div className={s.reviewSection}>
+          <h3>Your Review</h3>
+          <StarRating value={rating} onChange={(n) => fav.setRating(idNum, n)} />
+          <NoteBox value={note} onChange={(txt) => fav.setNote(idNum, txt)} />
         </div>
       </div>
 

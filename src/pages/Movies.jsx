@@ -15,6 +15,7 @@ import fetchGenres from "../api/genres.js";
 import posterUrl from "../api/images.js";
 import useScrollTop from "../hooks/useScrollTop.js";
 import useDebounce from "../hooks/useDebounce.js";
+import useFavorites from "../store/favorites.js";
 
 import s from "./Movies.module.css";
 
@@ -36,7 +37,7 @@ export default function Movies() {
   const [items, setItems] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
   const [genres, setGenres] = useState([]);
-
+  const fav = useFavorites();
   useScrollTop(page);
 
   useEffect(() => {
@@ -187,16 +188,25 @@ export default function Movies() {
         {loading ? (
           <SkeletonGrid count={8} />
         ) : items.length > 0 ? (
-          items.map((m) => (
-            <Card
-              key={m.id}
-              title={m.title}
-              year={m.year}
-              rating={m.rating}
-              posterUrl={m.posterUrl}
-              onOpen={() => openDetails(m.id)}
-            />
-          ))
+      items.map((m) => (
+  <Card
+    key={m.id}
+    id={m.id}
+    title={m.title}
+    year={m.year}
+    rating={m.rating}
+    posterUrl={m.posterUrl}
+    onOpen={() => openDetails(m.id)}
+    isFavorite={fav.isFavorite(m.id)}
+    onToggleFavorite={() => fav.toggle({
+      id: m.id,
+      title: m.title,
+      posterUrl: m.posterUrl,
+      year: m.year,
+      rating: m.rating,
+    })}
+  />
+))
         ) : (
           <EmptyState
             message={

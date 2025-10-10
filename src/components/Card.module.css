@@ -76,3 +76,22 @@
   border: 1px solid var(--border);
   font-size: 11px;
 }
+.overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.topRight {
+  position: absolute;
+  top: 0;
+  right: 0;
+  pointer-events: auto; 
+}
+.posterWrap {
+  position: relative;
+  width: 100%;
+  padding-top: 150%;
+  background: #f0f1f3;
+  overflow: hidden;
+}
+

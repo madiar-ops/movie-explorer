@@ -1,0 +1,22 @@
+.header {
+  margin-bottom: 8px;
+}
+.title {
+  margin: 0;
+}
+.subtitle {
+  color: var(--muted);
+  font-size: 14px;
+  margin-top: 4px;
+}
+.actions {
+  display: flex;
+  gap: 8px;
+  margin: 12px 0 16px;
+}
+.btn {
+  border: 1px solid var(--border);
+  background: #fff;
+  padding: 6px 12px;
+  border-radius: 8px;
+}

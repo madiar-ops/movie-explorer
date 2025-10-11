@@ -1,0 +1,29 @@
+.wrap { display: grid; place-items: center; padding: 24px 0; }
+.card {
+  width: min(720px, 96vw);
+  display: grid; gap: 16px;
+  padding: 18px;
+  border: 1px solid #2f3240;
+  background: #14161b; border-radius: 14px;
+}
+.row { display: flex; gap: 12px; align-items: center; }
+.avatar {
+  width: 64px; height: 64px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: #222735; color: #e6e6e6; font-weight: 700; font-size: 22px;
+}
+.meta { display: grid; }
+.name { font-weight: 700; font-size: 18px; }
+.email { opacity: .85; }
+.metrics { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.metric {
+  display: grid; gap: 4px; justify-items: center;
+  padding: 12px; border: 1px solid #2a2d3a; background: #0f1117; border-radius: 12px;
+}
+.metricNum { font-size: 22px; font-weight: 800; }
+.metricLabel { opacity: .8; font-size: 13px; }
+.signout {
+  justify-self: start;
+  padding: 8px 12px; border: 1px solid #3a3a3a; background: #1b1e26; color: #e6e6e6;
+  border-radius: 10px; cursor: pointer;
+}

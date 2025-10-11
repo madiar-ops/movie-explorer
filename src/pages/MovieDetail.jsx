@@ -97,6 +97,10 @@ export default function MovieDetail() {
           <StarRating value={rating} onChange={(n) => fav.setRating(idNum, n)} />
           <NoteBox value={note} onChange={(txt) => fav.setNote(idNum, txt)} />
         </div>
+          <div className={s.metaRow}>
+            <h3 className={s.sectionTitle}>Your tags</h3>
+            <TagsInput value={tags} onChange={(arr) => user.setTags(movieId, arr)} />
+          </div>
       </div>
 
       {trailer && (

@@ -2,10 +2,14 @@ import { NavLink } from "react-router-dom";
 import clsx from "clsx";
 import s from "./Header.module.css";
 import useFavorites from "../store/favorites.js";
-import HeaderStats from "../components/HeaderStats.jsx"
+import HeaderStats from "../components/HeaderStats.jsx";
+import { useAuth } from "../auth/AuthProvider";
+
 export default function Header() {
   const fav = useFavorites();
-    const savedCount =
+  const { user } = useAuth();
+
+  const savedCount =
     Array.isArray(fav?.items) ? fav.items.length
     : fav?.ids instanceof Set ? fav.ids.size
     : 0;
@@ -14,14 +18,27 @@ export default function Header() {
     <header className={s.wrap}>
       <div className={s.inner}>
         <div className={s.brand}>🎬 Movie Explorer</div>
+
         <nav className={s.nav}>
           <NavLink to="/" className={({ isActive }) => clsx(s.link, isActive && s.active)}>Home</NavLink>
           <NavLink to="/movies" className={({ isActive }) => clsx(s.link, isActive && s.active)}>Movies</NavLink>
           <NavLink to="/favorites" className={({ isActive }) => clsx(s.link, isActive && s.active)}>
-            Favorites
-            {savedCount > 0 ? <span className={s.badge}>{savedCount}</span> : null}
+            Favorites{savedCount > 0 ? <span className={s.badge}>{savedCount}</span> : null}
           </NavLink>
           <NavLink to="/about" className={({ isActive }) => clsx(s.link, isActive && s.active)}>About</NavLink>
+
+          {/* Auth */}
+          {user ? (
+            <NavLink to="/profile" className={({ isActive }) => clsx(s.link, isActive && s.active)}>
+              {user.name || user.displayName || user.username || "Profile"}
+            </NavLink>
+          ) : (
+            <>
+              <NavLink to="/login" className={({ isActive }) => clsx(s.link, isActive && s.active)}>Login</NavLink>
+              <NavLink to="/register" className={({ isActive }) => clsx(s.link, isActive && s.active)}>Register</NavLink>
+            </>
+          )}
+
           <HeaderStats />
         </nav>
       </div>

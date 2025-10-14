@@ -5,10 +5,10 @@ const LS_KEY = "movie-explorer:favorites:v1";
 
 let listeners = new Set();
 let state = {
-  items: [],          
+  items: [],         
   ids: new Set(),     
-  notes: {},           
-  ratings: {},         
+  notes: {},          
+  ratings: {},        
 };
 
 function emit() {
@@ -26,24 +26,30 @@ export function ratingGet(id) {
 export function getAllRatings() {
   return state.ratings;
 }
-
-export function getNotesCount() {
-  return Object.values(state.notes).filter((t) => String(t || "").trim().length > 0).length;
-}
 export function getAverageRating() {
   const vals = Object.values(state.ratings).map(Number).filter((n) => !Number.isNaN(n));
   if (vals.length === 0) return null;
   const sum = vals.reduce((a, b) => a + b, 0);
-  return Math.round((sum / vals.length) * 10) / 10; 
+  return Math.round((sum / vals.length) * 10) / 10;
 }
 
-export function favGetState() {
-  return state;
+export function noteSet(id, text) {
+  state = { ...state, notes: { ...state.notes, [id]: text || "" } };
+  emit();
 }
+export function noteGet(id) { return state.notes[id] || ""; }
+export function getAllNotes() { return state.notes; }
+export function getNotesCount() {
+  return Object.values(state.notes).filter((t) => String(t || "").trim().length > 0).length;
+}
+
+export function favGetState() { return state; }
 export function favSubscribe(listener) {
   listeners.add(listener);
   return () => listeners.delete(listener);
 }
+
+export function isFavorite(id) { return state.ids.has(id); }
 
 export function add(item) {
   if (!item || typeof item.id !== "number") return;
@@ -56,7 +62,6 @@ export function add(item) {
   state = { ...state, items: nextItems, ids: nextIds };
   emit();
 }
-
 export function remove(id) {
   if (!state.ids.has(id)) return;
 
@@ -67,20 +72,14 @@ export function remove(id) {
   state = { ...state, items: nextItems, ids: nextIds };
   emit();
 }
-
 export function toggle(item) {
   if (!item || typeof item.id !== "number") return;
   state.ids.has(item.id) ? remove(item.id) : add(item);
 }
-
 export function clear() {
   if (state.items.length === 0 && state.ids.size === 0) return;
   state = { ...state, items: [], ids: new Set() };
   emit();
-}
-
-export function isFavorite(id) {
-  return state.ids.has(id);
 }
 
 export function favAdd(id)    { add({ id }); }
@@ -88,13 +87,6 @@ export function favRemove(id) { remove(id); }
 export function favToggle(id) { isFavorite(id) ? remove(id) : add({ id }); }
 export function favHas(id)    { return isFavorite(id); }
 export function favSize()     { return state.items.length; }
-
-export function noteSet(id, text) {
-  state = { ...state, notes: { ...state.notes, [id]: text || "" } };
-  emit();
-}
-export function noteGet(id) { return state.notes[id] || ""; }
-export function getAllNotes() { return state.notes; }
 
 export function favHydrate(favorites = [], notesObj = {}, ratingsObj = {}) {
   let nextItems;
@@ -117,7 +109,11 @@ export function favHydrate(favorites = [], notesObj = {}, ratingsObj = {}) {
 }
 
 export function useFavorites(selector = (s) => s) {
-  const [saved, setSaved] = useLocalStorage(LS_KEY, { favorites: [], notes: {}, ratings: {} });
+  const [saved, setSaved] = useLocalStorage(LS_KEY, {
+    favorites: [],
+    notes: {},
+    ratings: {},
+  });
   const [, force] = useState(0);
   const hydrated = useRef(false);
 
@@ -130,10 +126,13 @@ export function useFavorites(selector = (s) => s) {
     }
   }, [saved]);
 
-
   useEffect(() => {
     function onChange(next) {
-      const payload = { favorites: next.items, notes: next.notes, ratings: next.ratings };
+      const payload = {
+        favorites: next.items,
+        notes: next.notes,
+        ratings: next.ratings,
+      };
       const same =
         JSON.stringify(payload.favorites) === JSON.stringify(saved.favorites) &&
         JSON.stringify(payload.notes) === JSON.stringify(saved.notes) &&
@@ -144,11 +143,12 @@ export function useFavorites(selector = (s) => s) {
     return () => unsub();
   }, [saved]);
 
-  const snapshot = selector({
+  const snapRaw = {
     items: state.items,
     ids: state.ids,
     notes: state.notes,
     ratings: state.ratings,
+
     add, remove, toggle, clear, isFavorite,
     setNote: noteSet, getNote: noteGet, getAllNotes,
     setRating: ratingSet, getRating: ratingGet, getAllRatings,
@@ -156,8 +156,13 @@ export function useFavorites(selector = (s) => s) {
     hydrate: favHydrate,
     size: () => state.items.length,
     has: isFavorite,
-  });
 
+ 
+    favorites: state.ids,                 
+    toggleFavorite: (id) => toggle({ id }), 
+  };
+
+  const snapshot = selector ? selector(snapRaw) : snapRaw;
   return snapshot;
 }
 

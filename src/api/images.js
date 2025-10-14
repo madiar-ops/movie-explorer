@@ -1,8 +1,5 @@
-const BASE_IMG = import.meta.env.VITE_TMDB_IMG || "https://image.tmdb.org/t/p";
-
-export function posterUrl(path, size = "w342") {
+export default function posterUrl(path, size = 342) {
   if (!path) return "";
-  return `${BASE_IMG}/${size}${path}`;
+  const s = typeof size === "number" ? `w${size}` : String(size);
+  return `https://image.tmdb.org/t/p/${s}${path}`;
 }
-
-export default posterUrl; 

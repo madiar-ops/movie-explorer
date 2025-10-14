@@ -7,7 +7,7 @@ function PinIcon({ active }) {
   return (
     <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
       <path
-        d="M14 3l7 7-4 1-3 6-4-4 6-3 1-4zM5 19l6-1-5-5-1 6z"
+        d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14l-5-4.87 6.91-1.01L12 2z"
         fill={active ? "currentColor" : "none"}
         stroke="currentColor"
         strokeWidth="1.5"
@@ -16,24 +16,34 @@ function PinIcon({ active }) {
   );
 }
 
-export default function Card({ movie }) {
-  if (!movie || typeof movie !== "object") return null;
+export default function Card(props) {
+  const movie = props.movie;
 
-  const id = movie.id ?? movie.movie_id; 
+  const id =
+    (movie && (movie.id ?? movie.movie_id)) ??
+    props.id;
+
   if (id == null) return null;
 
-  const title = movie.title || movie.name || "Untitled";
-  const posterPath = movie.poster_path || movie.backdrop_path || null;
+  const title =
+    (movie && (movie.title || movie.name)) ??
+    props.title ??
+    "Untitled";
 
-  const user = useUserData();
-  const fav = user.favorites.has(id);
-  const tags = user.tags[id] || [];
+  const posterPath = movie?.poster_path || movie?.backdrop_path || null;
+  const imgSrc =
+    props.posterUrl ||
+    movie?.posterUrl ||   
+    (posterPath ? posterUrl(posterPath, 342) : "");
+
+  const user = useUserData?.() 
+  const fav = user.favorites?.has?.(id) || false;
 
   return (
     <div className={s.card} data-fav={fav ? "1" : "0"}>
       <button
         className={s.pin}
-        onClick={() => user.toggleFavorite(id)}
+        onClick={() => user.toggleFavorite?.(id)}
         aria-label={fav ? "Unpin from favorites" : "Pin to favorites"}
         title={fav ? "Unpin" : "Pin"}
         type="button"
@@ -41,22 +51,16 @@ export default function Card({ movie }) {
         <PinIcon active={fav} />
       </button>
 
-      <Link to={`/movie/${id}`} className={s.cover}>
-        {posterPath ? (
-          <img src={posterUrl(posterPath, 342)} alt={title} loading="lazy" />
+      <Link to={`/movies/${id}`} className={s.cover}>
+        {imgSrc ? (
+          <img src={imgSrc} alt={title} loading="lazy" />
         ) : (
           <div className={s.noPoster}>No poster</div>
         )}
       </Link>
 
       <div className={s.meta}>
-        <Link to={`/movie/${id}`} className={s.title}>{title}</Link>
-        <div className={s.badges}>
-          {tags.slice(0, 4).map((t) => (
-            <span key={t} className={s.tag}>{t}</span>
-          ))}
-          {tags.length > 4 && <span className={s.more}>+{tags.length - 4}</span>}
-        </div>
+        <Link to={`/movies/${id}`} className={s.title}>{title}</Link>
       </div>
     </div>
   );

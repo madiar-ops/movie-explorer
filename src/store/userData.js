@@ -1,94 +1,66 @@
-import { create } from "zustand";
+import { useEffect, useMemo, useState } from "react";
+import useFavorites from "./favorites";
 
-const persistKey = "movie-explorer:userData:v2";
+const RV_LS_KEY = "movie-explorer:recentlyViewed:v1";
+const RV_LIMIT = 50;
 
-const defaultState = {
-  favorites: new Set(),
-  notes: {},           
-  ratings: {},            
-  tags: {},               
-  recentlyViewed: [],    
-};
-
-function revive(state) {
-  if (!state) return defaultState;
-  return {
-    ...defaultState,
-    ...state,
-    favorites: new Set(state.favorites || []),
-  };
+function loadRV() {
+  try {
+    const raw = localStorage.getItem(RV_LS_KEY);
+    const arr = raw ? JSON.parse(raw) : [];
+    return Array.isArray(arr) ? arr : [];
+  } catch {
+    return [];
+  }
+}
+function saveRV(arr) {
+  try {
+    localStorage.setItem(RV_LS_KEY, JSON.stringify(arr.slice(0, RV_LIMIT)));
+  } catch {}
 }
 
-export const useUserData = create((set, get) => ({
-  ...revive(JSON.parse(localStorage.getItem(persistKey) || "null")),
+export default function useUserData() {
+  const fav = useFavorites((s) => ({
+    ids:                      s.ids,              
+    items:                    s.items,               
+    notes:                    s.notes,              
+    ratings:                  s.ratings,             
+    isFavorite:               s.isFavorite,
+    toggle:                   s.toggle,              
+    setNote:                  s.setNote,
+    setRating:                s.setRating,
+    
+  }));
 
-  _flush() {
-    const { favorites, notes, ratings, tags, recentlyViewed } = get();
-    localStorage.setItem(
-      persistKey,
-      JSON.stringify({
-        favorites: Array.from(favorites),
-        notes,
-        ratings,
-        tags,
-        recentlyViewed,
-      })
-    );
-  },
+  const [recentlyViewed, setRecentlyViewed] = useState(loadRV);
 
-  toggleFavorite(id) {
-    const { favorites, _flush } = get();
-    if (favorites.has(id)) favorites.delete(id);
-    else favorites.add(id);
-    set({ favorites: new Set(favorites) });
-    _flush();
-  },
+  useEffect(() => {
+    saveRV(recentlyViewed);
+  }, [recentlyViewed]);
 
-  setNote(id, text) {
-    const { notes, _flush } = get();
-    const next = { ...notes, [id]: text || "" };
-    set({ notes: next });
-    _flush();
-  },
+  const api = useMemo(() => {
+    return {
+      favorites: fav.ids,
 
-  setRating(id, value) {
-    const { ratings, _flush } = get();
-    const next = { ...ratings, [id]: Number(value) || 0 };
-    set({ ratings: next });
-    _flush();
-  },
+      isFavorite: (id) => fav.isFavorite(id),
+      toggleFavorite: (id) => fav.toggle({ id }),
 
-  setTags(id, arr) {
-    const { tags, _flush } = get();
-    const uniq = Array.from(new Set((arr || []).map(s => s.trim()).filter(Boolean)));
-    const next = { ...tags, [id]: uniq };
-    set({ tags: next });
-    _flush();
-  },
+      notes: fav.notes,
+      ratings: fav.ratings,
+      setNote: (id, text) => fav.setNote(id, text),
+      setRating: (id, value) => fav.setRating(id, value),
 
-  addTag(id, tag) {
-    const { tags, _flush } = get();
-    const curr = tags[id] || [];
-    const next = Array.from(new Set([...curr, tag.trim()])).filter(Boolean);
-    set({ tags: { ...tags, [id]: next } });
-    _flush();
-  },
+      recentlyViewed,
+      addRecentlyViewed: (id) => {
+        if (typeof id !== "number") return;
+        setRecentlyViewed((prev) => {
+          const next = [id, ...prev.filter((x) => x !== id)];
+          return next.slice(0, RV_LIMIT);
+        });
+      },
+      clearRecentlyViewed: () => setRecentlyViewed([]),
+    };
+  }, [fav, recentlyViewed]);
 
-  removeTag(id, tag) {
-    const { tags, _flush } = get();
-    const curr = tags[id] || [];
-    const next = curr.filter(t => t.toLowerCase() !== String(tag).toLowerCase());
-    set({ tags: { ...tags, [id]: next } });
-    _flush();
-  },
-
-  touchViewed(id) {
-    const { recentlyViewed, _flush } = get();
-    const filtered = recentlyViewed.filter(x => x !== id);
-    const next = [id, ...filtered].slice(0, 50);
-    set({ recentlyViewed: next });
-    _flush();
-  },
-}));
-
-export default useUserData;
+  return api;
+}

@@ -1,18 +1,36 @@
-import client, { withSignal } from "./client.js";
+import client, { withSignal } from "./client";
 
-export async function fetchMovieDetails(id, { signal } = {}) {
-  const res = await client.get(`/movie/${id}`, withSignal({}, signal));
-  return res.data;
+export default async function fetchMovieDetails(movieId, { signal } = {}) {
+  const r = await client.get(`/movie/${movieId}`, withSignal({}, signal));
+  return r.data || null;
 }
 
-export async function fetchMovieVideos(id, { signal } = {}) {
-  const res = await client.get(`/movie/${id}/videos`, withSignal({}, signal));
-  return res.data.results || [];
+export async function fetchMovieVideos(movieId, { signal } = {}) {
+  const r = await client.get(
+    `/movie/${movieId}/videos`,
+    withSignal({ params: { language: "en-US" } }, signal)
+  );
+  // На TMDB формат { id, results: [] }
+  return Array.isArray(r.data?.results) ? r.data.results : [];
 }
 
-export async function fetchRecommendations(id, { signal } = {}) {
-  const res = await client.get(`/movie/${id}/recommendations`, withSignal({}, signal));
-  return res.data.results || [];
+/** Рекомендации (вернём объект {results, total_pages, ...}) */
+export async function fetchRecommendations(movieId, { signal } = {}) {
+  const r = await client.get(
+    `/movie/${movieId}/recommendations`,
+    withSignal({ params: { page: 1 } }, signal)
+  );
+  // Гарантируем наличие results-массива
+  const results = Array.isArray(r.data?.results) ? r.data.results : [];
+  return { ...r.data, results };
 }
 
-export default fetchMovieDetails;
+/** Similar — пригодится как фолбэк, если рекомендаций нет */
+export async function fetchSimilar(movieId, { signal } = {}) {
+  const r = await client.get(
+    `/movie/${movieId}/similar`,
+    withSignal({ params: { page: 1 } }, signal)
+  );
+  const results = Array.isArray(r.data?.results) ? r.data.results : [];
+  return { ...r.data, results };
+}

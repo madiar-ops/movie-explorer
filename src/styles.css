@@ -344,17 +344,25 @@ a:hover { color: var(--accent); }
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: var(--space-5);
 }
-@media (max-width: var(--bp-sm)) {
+
+/* было: @media (max-width: var(--bp-sm)) */
+@media (max-width: 480px) {
   .grid { grid-template-columns: 1fr; gap: var(--space-4); }
   .btn--full-on-sm { width: 100%; }
 }
-@media (min-width: var(--bp-sm)) and (max-width: var(--bp-md)) {
+
+/* было: @media (min-width: var(--bp-sm)) and (max-width: var(--bp-md)) */
+@media (min-width: 480px) and (max-width: 768px) {
   .grid { grid-template-columns: repeat(2, 1fr); }
 }
-@media (min-width: var(--bp-md)) and (max-width: var(--bp-lg)) {
+
+/* было: @media (min-width: var(--bp-md)) and (max-width: var(--bp-lg)) */
+@media (min-width: 768px) and (max-width: 1024px) {
   .grid { grid-template-columns: repeat(3, 1fr); }
 }
-@media (min-width: var(--bp-lg)) {
+
+/* было: @media (min-width: var(--bp-lg)) */
+@media (min-width: 1024px) {
   .grid { grid-template-columns: repeat(4, 1fr); }
 }
 

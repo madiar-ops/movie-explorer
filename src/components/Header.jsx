@@ -17,7 +17,7 @@ export default function Header() {
   return (
     <header className={s.wrap}>
       <div className={s.inner}>
-        <div className={s.brand}>🎬 Movie Explorer</div>
+        <div className={s.brand}>Movie Explorer</div>
 
         <nav className={s.nav}>
           <NavLink to="/" className={({ isActive }) => clsx(s.link, isActive && s.active)}>Home</NavLink>

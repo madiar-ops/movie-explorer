@@ -20,3 +20,71 @@
   padding: 6px 12px;
   border-radius: 8px;
 }
+.actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-block: 24px;
+}
+
+/* базовый стиль кнопки, общий для панели */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 22px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+  border: 1px solid var(--border, #273140);
+  color: var(--text, #C5C6C7);
+  background: rgba(31, 40, 51, 0.85);
+  backdrop-filter: blur(6px);
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.btn:hover:not(:disabled) {
+  color: var(--accent-strong, #66FCF1);
+  border-color: rgba(102, 252, 241, 0.4);
+  background: rgba(69, 162, 158, 0.15);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 252, 241, 0.2);
+}
+
+.btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+/* 🔥 стилизуем кнопку "Clear all" красной через data-атрибут или текст */
+.actions .btn:first-child,
+.btn[data-variant="danger"] {
+  background: linear-gradient(180deg, #ff5b5b, #d93636);
+  color: #fff;
+  border: 1px solid rgba(255, 77, 77, 0.6);
+  box-shadow: 0 0 10px rgba(255, 77, 77, 0.25);
+}
+
+.actions .btn:first-child:hover:not(:disabled),
+.btn[data-variant="danger"]:hover:not(:disabled) {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+  box-shadow: 0 0 14px rgba(255, 77, 77, 0.35);
+}
+
+.actions .btn:first-child:active:not(:disabled),
+.btn[data-variant="danger"]:active:not(:disabled) {
+  transform: scale(0.97);
+}

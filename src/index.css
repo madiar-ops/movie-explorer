@@ -1,68 +1,45 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+:root{
+  --bg: #0B0C10;
+  --surface: #1F2833;
+  --surface-2:#151b24;
+  --line: #2a3342;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  --text:#C5C6C7;
+  --text-weak:#9aa3b2;
+  --text-strong:#eaf0f6;
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+  --accent:#45A29E;
+  --accent-weak:#2e7673;
+  --accent-contrast:#0bffff; 
+  --contrast:#66FCF1;
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
+  --radius-xs:8px; --radius-sm:12px; --radius:16px; --radius-lg:20px; --radius-2xl:24px;
+  --shadow: 0 6px 20px rgba(0,0,0,.35);
+  --shadow-lg: 0 18px 50px rgba(0,0,0,.45);
+  --ring: 0 0 0 2px rgba(102,252,241,.35);
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  --gap-1:8px; --gap-2:12px; --gap-3:18px; --gap-4:24px;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+*{ box-sizing:border-box }
+html,body,#root{ height:100% }
+html{ color-scheme: dark }
+body{
+  margin:0;
+  background: radial-gradient(1200px 800px at 85% -10%, rgba(102,252,241,.06), transparent 40%) , var(--bg);
+  color:var(--text);
+  font: 400 16px/1.55 system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, "Noto Color Emoji", "Segoe UI Emoji";
+  letter-spacing:.1px;
 }
+a{ color:inherit; text-decoration:none }
+button{ font:inherit }
+img{ display:block; max-width:100% }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
+.container{ width:min(1200px, 100% - 32px); margin-inline:auto; }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+.hr{ height:1px; background:var(--line); border:0; }
+
+@media (prefers-reduced-motion:no-preference){
+  .animate-in{ animation:fadeUp .5s ease both }
+  @keyframes fadeUp{ from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:none}}
 }

@@ -1,17 +1,7 @@
-.wrap {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 6px 0 12px;
+.wrap{ display:flex; gap:8px; flex-wrap:wrap; margin:8px 0 16px; }
+.chip{
+  padding:7px 12px; border-radius:999px; border:1px solid var(--line);
+  background:var(--surface-2); color:var(--text); cursor:pointer; transition:.2s;
 }
-
-.select {
-  border: 1px solid var(--border);
-  background: #fff;
-  border-radius: 8px;
-  padding: 6px 10px;
-}
-.label {
-  font-size: 14px;
-  color: var(--muted);
-}
+.chip:hover{ border-color:#345; color:var(--contrast) }
+.active{ background:rgba(69,162,158,.18); border-color:rgba(102,252,241,.35); color:#eaffff }

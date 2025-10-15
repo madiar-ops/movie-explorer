@@ -32,10 +32,10 @@ export default function Movies() {
   const debouncedQuery = useDebounce(queryRaw, 400);
 
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [items, setItems] = useState([]);
+  const [error,   setError]   = useState("");
+  const [items,   setItems]   = useState([]);
   const [totalPages, setTotalPages] = useState(1);
-  const [genres, setGenres] = useState([]);
+  const [genres,  setGenres]  = useState([]);
 
   const fav = useFavorites();
   useScrollTop(page);
@@ -159,18 +159,24 @@ export default function Movies() {
         </div>
       </header>
 
-      <SearchBar
-        query={queryRaw}
-        onChange={handleQueryChange}
-        onClear={clearQuery}
-      />
+      <div className="search-bar" aria-label="Movie search">
+     
+        <SearchBar
+          query={queryRaw}
+          onChange={handleQueryChange}
+          onClear={clearQuery}
+        />
+      </div>
 
       {!isSearch && (
-        <GenreFilter
-          genres={genres}
-          selected={genreRaw}
-          onChange={handleGenreChange}
-        />
+        <div className="genre-filter" data-horizontal aria-label="Genre filter">
+    
+          <GenreFilter
+            genres={genres}
+            selected={genreRaw}
+            onChange={handleGenreChange}
+          />
+        </div>
       )}
 
       {error && <EmptyState message={error} />}
@@ -214,11 +220,12 @@ export default function Movies() {
       </MovieGrid>
 
       {!loading && items.length > 0 && (
-        <div>
-          <button onClick={prevPage} disabled={page <= 1}>← Prev</button>
-          <span>{page} / {totalPages}</span>
-          <button onClick={nextPage} disabled={page >= totalPages}>Next →</button>
-        </div>
+      <div className="nav-controls">
+  <button onClick={prevPage} disabled={page <= 1}>← Prev</button>
+  <span>{page} / {totalPages}</span>
+  <button onClick={nextPage} disabled={page >= totalPages}>Next →</button>
+</div>
+
       )}
     </section>
   );

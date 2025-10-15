@@ -27,3 +27,26 @@
   padding: 8px 12px; border: 1px solid #3a3a3a; background: #1b1e26; color: #e6e6e6;
   border-radius: 10px; cursor: pointer;
 }
+.wrap{ display:grid; place-items:center; padding:20px 0 }
+.card{
+  width:min(680px,100%); background:var(--surface); border:1px solid var(--line); border-radius:18px;
+  padding:18px; box-shadow:var(--shadow);
+}
+.row{ display:flex; align-items:center; gap:16px; }
+.avatar{
+  width:56px; height:56px; border-radius:14px; background:linear-gradient(135deg,#1a2330,#0f141c);
+  display:grid; place-items:center; font-weight:800; color:var(--contrast); border:1px solid #2c3545;
+}
+.meta .name{ font-weight:800; color:var(--text-strong) }
+.meta .email{ opacity:.7 }
+
+.metrics{ display:flex; gap:16px; margin:18px 0 }
+.metric{ flex:1; background:var(--surface-2); border:1px solid var(--line); border-radius:14px; padding:14px; text-align:center }
+.metricNum{ font-size:22px; font-weight:900; color:#eaffff }
+.metricLabel{ opacity:.75 }
+
+.signout{
+  margin-top:6px; padding:11px 14px; border-radius:12px; border:1px solid var(--line); background:#161d27; color:#ffdede;
+  cursor:pointer; transition:.2s; width:100%;
+}
+.signout:hover{ background:#1a232f; border-color:#3b465a; color:#fff }

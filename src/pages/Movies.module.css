@@ -30,3 +30,15 @@
   font-size: 14px;
   color: var(--muted);
 }
+.header{ display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin:6px 0 10px }
+.title{ margin:0; font-size:28px; color:var(--text-strong) }
+.subtitle{ opacity:.75 }
+
+.pagination{ display:flex; justify-content:center; align-items:center; gap:10px; margin:16px 0 0 }
+.pageBtn{
+  padding:10px 14px; border-radius:10px; border:1px solid var(--line); background:var(--surface-2);
+  color:var(--text); cursor:pointer; transition:.2s;
+}
+.pageBtn:hover{ background:#18202b; border-color:#334055; color:var(--contrast) }
+.pageBtn:disabled{ opacity:.45; cursor:not-allowed }
+.pageInfo{ opacity:.8 }

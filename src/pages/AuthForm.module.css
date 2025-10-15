@@ -1,46 +1,162 @@
+/* AuthForm.module.css */
+/* Использует глобальные токены, но с безопасными fallback'ами */
+
+:root {
+  /* локальные fallbacks на случай отсутствия глобальных */
+  --bg: var(--bg, #0B0C10);
+  --surface: var(--surface, #1F2833);
+  --surface-2: var(--surface-2, #162029);
+  --text: var(--text, #C5C6C7);
+  --text-muted: var(--text-muted, #9AA1A6);
+  --accent: var(--accent, #45A29E);
+  --accent-strong: var(--accent-strong, #66FCF1);
+  --border: var(--border, #273140);
+  --focus: var(--focus, #66FCF1);
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --radius-sm: 10px;
+  --radius-md: 14px;
+
+  --shadow-1: 0 8px 24px rgba(0,0,0,.35);
+  --glow: 0 0 18px rgba(102,252,241,.22);
+
+  --dur: 180ms;
+  --ease: cubic-bezier(.21,.01,.21,1);
+}
+
+/* ====== Layout ====== */
 .wrap {
-  min-height: 60vh;
+  min-height: 100dvh;
   display: grid;
   place-items: center;
+  padding: 24px;
+  background:
+    radial-gradient(900px 600px at 90% -10%, rgba(102,252,241,.06), transparent 40%),
+    radial-gradient(700px 480px at -10% 110%, rgba(69,162,158,.06), transparent 45%),
+    var(--bg);
 }
+
 .form {
-  width: min(420px, 92vw);
-  display: grid;
-  gap: 12px;
-  padding: 20px;
-  border: 1px solid #2f3240;
-  background: #ffffff;
-  border-radius: 14px;
+  width: min(92vw, 420px);
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  border: 1px solid color-mix(in srgb, var(--border) 85%, transparent);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-1);
+  padding: 28px 24px 24px;
+  backdrop-filter: saturate(130%) blur(6px);
 }
-.title { font-size: 22px; font-weight: 700; }
-.label { display: grid; gap: 6px; font-size: 14px; }
-.input {
-  padding: 10px 12px;
-  border: 1px solid #3a3a3a;
-  background: #435280;
-  color: #e6e6e6;
-  border-radius: 10px;
+
+/* ====== Typography ====== */
+.title {
+  margin: 0 0 8px;
+  font-size: clamp(22px, 3vw, 28px);
+  font-weight: 800;
+  letter-spacing: .2px;
+  color: var(--text);
+  background: linear-gradient(90deg, var(--accent-strong), #8dfaf3);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
-.btn {
-  padding: 10px 12px;
-  border: 1px solid #3a3a3a;
-  background: #1b1e26;
-  color: #e6e6e6;
-  border-radius: 10px;
-  cursor: pointer;
-}
-.alt { font-size: 14px; opacity: .9; }
+
 .error {
-  padding: 8px 10px;
-  border: 1px dashed #b44;
-  background: #2a1414;
-  color: #ffb1b1;
-  border-radius: 10px;
+  margin: 10px 0 12px;
+  padding: 10px 12px;
+  border: 1px solid color-mix(in srgb, #ff4d4f 45%, var(--border));
+  background: color-mix(in srgb, #ff4d4f 10%, var(--surface-2));
+  color: #ffb4b4;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
 }
-.success {
-  padding: 8px 10px;
-  border: 1px dashed #2a5;
-  background: #0f2a19;
-  color: #a6ffcf;
-  border-radius: 10px;
+
+/* ====== Fields ====== */
+.label {
+  display: grid;
+  gap: 6px;
+  margin-top: 14px;
+  color: var(--text-muted);
+  font-size: 14px;
 }
+
+.input {
+  width: 100%;
+  height: 44px;
+  padding: 0 14px;
+  color: var(--text);
+  background: color-mix(in srgb, var(--surface-2) 92%, transparent);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  transition: border-color var(--dur) var(--ease),
+              box-shadow var(--dur) var(--ease),
+              background var(--dur) var(--ease);
+}
+.input::placeholder { color: color-mix(in srgb, var(--text-muted) 85%, transparent); }
+
+.input:focus {
+  outline: none;
+  border-color: var(--focus);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus) 22%, transparent), var(--glow);
+  background: color-mix(in srgb, var(--surface-2) 98%, transparent);
+}
+
+.input:user-invalid {
+  border-color: color-mix(in srgb, #ff4d4f 55%, var(--border));
+}
+
+/* ====== Actions ====== */
+.btn {
+  margin-top: 18px;
+  width: 100%;
+  height: 46px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  letter-spacing: .2px;
+  cursor: pointer;
+  color: #0b1013;
+  background: linear-gradient(180deg, var(--accent-strong), var(--accent));
+  box-shadow: var(--glow);
+  transition: transform var(--dur) var(--ease),
+              filter var(--dur) var(--ease),
+              box-shadow var(--dur) var(--ease);
+}
+
+.btn:hover { transform: translateY(-1px); filter: brightness(1.05); }
+.btn:active { transform: translateY(0); }
+
+.btn:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+  filter: none;
+  box-shadow: none;
+}
+
+/* ====== Footer line ====== */
+.alt {
+  margin-top: 14px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+.alt a {
+  color: var(--accent-strong);
+  text-decoration: none;
+  padding: 2px 4px;
+  border-radius: 6px;
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.alt a:hover {
+  color: var(--accent-strong);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+
+/* small devices */
+@media (max-width: 420px) {
+  .form { padding: 22px 18px; }
+  .input { height: 42px; }
+  .btn { height: 44px; }
+}
+  

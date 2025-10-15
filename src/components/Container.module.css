@@ -1,5 +1,1 @@
-.root {
-  max-width: 1120px;
-  margin: 0 auto;
-  padding: 20px 16px 40px;
-}
+.wrap{ width:min(1200px, 100% - 32px); margin:24px auto; }

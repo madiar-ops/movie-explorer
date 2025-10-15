@@ -54,22 +54,23 @@ export default function FavExportImport() {
     <section className="fav-transfer">
       <h2 className="fav-transfer__title">Favorites & Notes — Export / Import</h2>
 
-      <div className="fav-transfer__actions">
-        <button className="btn btn-primary" type="button" onClick={handleExport}>
-          Export JSON
-        </button>
+<div className="fav-transfer__actions">
+  <button className="btn btn-primary" type="button" onClick={handleExport}>
+    Export JSON
+  </button>
 
-        <label className="btn btn-secondary">
-          Import JSON
-          <input
-            ref={inputRef}
-            type="file"
-            accept="application/json"
-            onChange={handleImportFile}
-            className="visually-hidden"
-          />
-        </label>
-      </div>
+  <label className="btn btn-secondary">
+    Import JSON
+    <input
+      ref={inputRef}
+      type="file"
+      accept="application/json"
+      onChange={handleImportFile}
+      className="visually-hidden"
+    />
+  </label>
+</div>
+
 
       {message ? <p className="fav-transfer__msg" role="status">{message}</p> : null}
 

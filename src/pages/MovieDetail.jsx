@@ -48,26 +48,22 @@ export default function MovieDetail() {
         ]);
         if (cancelled) return;
 
-        // нормализуем
         const videosArr = Array.isArray(vids) ? vids : [];
         let recItems = Array.isArray(recResp?.results) ? recResp.results : [];
 
-        // если рекомендаций действительно нет — попробуем similar
         if (recItems.length === 0) {
           try {
             const sim = await fetchSimilar(idNum, { signal: ac.signal });
             recItems = Array.isArray(sim?.results) ? sim.results : [];
           } catch (e) {
-            // игнор, если отмена
             if (e?.code === "ERR_CANCELED" || e?.message === "canceled") {
-              /* noop */
             }
           }
         }
 
         setMovie(details || null);
         setVideos(videosArr);
-        setRecs(recItems.slice(0, 8)); // ограничим сколько рисуем
+        setRecs(recItems.slice(0, 8)); 
       } catch (e) {
         if (e?.code === "ERR_CANCELED" || e?.message === "canceled") return;
         setErr("Failed to load movie details.");

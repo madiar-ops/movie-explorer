@@ -10,3 +10,8 @@
 .text {
   font-size: 15px;
 }
+.wrap{
+  padding:36px; text-align:center; border:1px dashed #2e3a4b; border-radius:16px; background:rgba(21,27,36,.5);
+}
+.title{ margin:0 0 6px; font-weight:800; color:var(--text-strong) }
+.subtitle{ opacity:.8 }
